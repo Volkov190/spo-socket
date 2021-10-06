@@ -39,16 +39,6 @@
         <div class="message__user">пользователь 4</div>
         <div class="message__text">Текст сообщения</div>
     </div>
-    <script>
-        let socket = new WebSocket('ws://127.0.0.1:2000');
-
-        socket.onmessage = (message) => {
-            console.log(message.data);
-        };
-        socket.addEventListener('close', () => {
-            console.log('Connection closed');
-        });
-
-    </script>
+    <script src="scripts/main.js"></script>
 </body>
 </html>

@@ -14,7 +14,13 @@ wss.on('connection',(cli) => {
     let mes = 0;
     setInterval(() => cli.send(`Message: ${++mes}`), 1000);
 
+    cli.addListener('message', (message) => {
+        console.log(JSON.parse(Buffer.from(message).toString()));
+    });
+
 })
+
+
 
 // const server = http.createServer((req, res) => {
 //     // console.log(req.body);
