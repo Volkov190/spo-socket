@@ -2,7 +2,7 @@ const socket = new WebSocket('ws://127.0.0.1:2000');
 const form = document.querySelector('.header__login-area');
 const signin_but = document.querySelector('.login-area__submit_sign-in');
 const signup_but = document.querySelector('.login-area__submit_sign-up');
-const script = document.querySelector('script')
+const mesArea = document.querySelector('.messages')
 
 socket.addEventListener('message', (message) => {
     console.log(message.data);
@@ -11,8 +11,8 @@ socket.addEventListener('message', (message) => {
     if (message.type === 'start') {
         for (mes of message.result) {
             const elem = `<div class="message"><div class="message__user">${mes.author} написал(а):</div><div class="message__text">${mes.text}</div></div>`;
-            script.insertAdjacentHTML('beforebegin', elem);
-            console.log(elem);
+            mesArea.insertAdjacentHTML('beforeend', elem);
+            // console.log(elem);
         }
     } else if (message.type === 'login') {
         if (message.result) {
