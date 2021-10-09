@@ -2,7 +2,9 @@ const socket = new WebSocket('ws://127.0.0.1:2000');
 const form = document.querySelector('.header__login-area');
 const signin_but = document.querySelector('.login-area__submit_sign-in');
 const signup_but = document.querySelector('.login-area__submit_sign-up');
-const mesArea = document.querySelector('.messages')
+const newMesArea = document.querySelector('.messages__new-message-area');
+const newMesBtn = document.querySelector('.new-message__button');
+const newMesForm = document.querySelector('.messages__new-message-area');
 
 socket.addEventListener('message', (message) => {
     console.log(message.data);
@@ -11,7 +13,7 @@ socket.addEventListener('message', (message) => {
     if (message.type === 'start') {
         for (mes of message.result) {
             const elem = `<div class="message"><div class="message__user">${mes.author} написал(а):</div><div class="message__text">${mes.text}</div></div>`;
-            mesArea.insertAdjacentHTML('beforeend', elem);
+            newMesArea.insertAdjacentHTML('beforebegin', elem);
             // console.log(elem);
         }
     } else if (message.type === 'login') {
@@ -57,4 +59,16 @@ socket.addEventListener('open', () => {
         type: 'start',
     };
     socket.send(JSON.stringify(message))
+});
+
+newMesBtn.addEventListener('click', (ev) => {
+    const message = {
+        type: 'newmessage',
+        text: newMesForm.text.value.trim(),
+    }
+    newMesForm.reset();
+
+    if (message.text !== '')
+        socket.send(JSON.stringify(message));
+    ev.preventDefault();
 });

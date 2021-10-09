@@ -69,6 +69,23 @@ h1 {
     margin-left: 40px;
 }
 
+.messages__new-message-area {
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+}
+
+.new-message__text {
+    width: 100%;
+    height: 60px;
+    resize: none;
+}
+
+.new-message__button {
+    margin-left: 80%;
+    /* margin-right: 60px;; */
+}
+
 .message {
     border: 1px solid aqua;
     width: 60%;
