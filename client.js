@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 
 const tobj = { 
-    type :'signin',
+    type :'start',
     login: 'test_login',
     password: 'test_password',
 }

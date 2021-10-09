@@ -15,35 +15,31 @@ def listener(client_socket, x):
                 queryType = json.loads(data)['type']
                 print(queryType)
                 result = False
+                response = None
                 if (queryType == 'signin'):
                     pass                                        # @TODO login в бд
                     result = False #debug
-                    # type = 'signin'
+                    response = {'type': queryType, 'result': result}
                 
                 if (queryType == 'signup'):
                     pass                                        # @TODO sign up
                     result = True
-                    # type = 'signup'
+                    response = {'type': queryType, 'result': result}
                 
                 if (queryType == 'start'):
                     pass                                        # @TODO установить соединение (отправить сообщения)
-                    result = True
-                    # type = 'start'
+                    response = {'type': 'start', 'result': [{'text': 'Test messages', 'author': 'Kirusha'}, {'text': 'It work', 'author': 'Sanya'}]} # debug
+                    
 
                 if (queryType == 'newmessage'):
                     pass                                        # @TODO сообщение в бд и событие остальным клиентам
                     result = True
-                    # type = 'newmessage'
+                    response = {'type': queryType, 'result': result}
 
-                resultMes = 'failed'
-                if (result):
-                    resultMes = 'success'
 
-                response = {'type': queryType, 'result': resultMes}
-                client_socket.send(json.dumps(response).encode('utf-8'))
+                if (not response is None):
+                    client_socket.send(json.dumps(response).encode('utf-8'))
                 
-
-                # print(data)
     except Exception as ex:
         print('[Server Error]:', ex)
         return -1
@@ -54,10 +50,3 @@ while(True):
     client_socket, address = server.accept()
 
     threading.Thread(target=listener, args=(client_socket, 0)).start()
-
-    # while(True):
-    #     if(client_socket):
-    #         data = client_socket.recv(1024).decode('utf-8')
-    #         print(data)
-    # client_socket.send(data.encode('utf-8'))
-    # client_socket.close()
