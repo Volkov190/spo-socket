@@ -52,6 +52,27 @@ def getAllMessages():
     finally:
         return result
 
+def pushMessage(text, author):
+    result = False
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT id FROM public.user WHERE name=%s", (author,))
+            connection.commit()
+            authorId = 0
+            resp = cursor.fetchone()
+            if (not resp is None):
+                authorId = resp[0]
+                cursor.execute("INSERT INTO public.messages \
+                                    (text, owner) \
+                                    VALUES (%s, %s)", (text, authorId))        
+                connection.commit()
+                result = True
+    except Exception as ex:
+        print('[DB Error] pushMessages Exception:', ex)
+    finally:
+        return result
+
+
 try:
     connection = psycopg2.connect(host = host, user = user, password = password, database = db_name)
 except Exception as ex:
