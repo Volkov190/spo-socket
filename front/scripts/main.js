@@ -14,6 +14,15 @@ socket.addEventListener('message', (message) => {
             script.insertAdjacentHTML('beforebegin', elem);
             console.log(elem);
         }
+    } else if (message.type === 'login') {
+        if (message.result) {
+            form.classList.add('header__login-area_none')
+            const loginText = document.querySelector('.login .login__text');
+            loginText.innerHTML = message.login;
+
+            const loginBut = document.querySelector('.login .login__button');
+            loginBut.innerHTML = 'Выход';
+        }
     }
 });
 

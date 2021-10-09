@@ -44,6 +44,19 @@ h1 {
     background-color: aliceblue;
 }
 
+.header__login-area_none {
+    display: none;
+}
+
+.login {
+    display: flex;
+}
+
+.login .login__text {
+    /* line-height: ; */
+    padding: 5px;
+}
+
 .login-area__login,
 .login-area__password,
 .login-area__submit {
