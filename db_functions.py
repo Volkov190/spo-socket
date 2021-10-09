@@ -33,6 +33,25 @@ def signin(login, password):
     finally:
         return result
 
+def getAllMessages():
+    result = []
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""SELECT public.messages.text, public.user.name FROM public.messages
+                                    INNER JOIN public.user
+                                    ON public.user.id=public.messages.owner""")
+            connection.commit()
+            # print(cursor.fetchall())
+            for line in cursor.fetchall():
+                message = {}
+                message["text"] = line[0]
+                message["author"] = line[1]
+                result.append(message)
+    except Exception as ex:
+        print('[DB Error] getAllMessages Exception:', ex)
+    finally:
+        return result
+
 try:
     connection = psycopg2.connect(host = host, user = user, password = password, database = db_name)
 except Exception as ex:
