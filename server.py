@@ -19,8 +19,8 @@ def listener(client_socket):
                 response = None
                 if (queryType == 'signin'):
                     pass                                        # @TODO login в бд
-                    result = False #debug
-                    response = {'type': queryType, 'result': result}
+                    result = True #debug
+                    response = {'type': queryType, 'result': result, 'login': data['login']}
                 
                 if (queryType == 'signup'):
                     pass                                        # @TODO sign up
