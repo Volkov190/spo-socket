@@ -36,7 +36,11 @@ def listener(client_socket):
                     pass                                        # @TODO сообщение в бд и событие остальным клиентам
                     messageSender(data['text'], data['author'])
                     result = True
-                    # response = {'type': queryType, 'result': result}
+
+                if (queryType == 'end'):
+                    response = None
+                    clients.remove(client_socket)
+                    print('client disconnected')
 
 
                 if (not response is None):
@@ -44,14 +48,15 @@ def listener(client_socket):
                 
     except Exception as ex:
         print('[Server Error]:', ex)
+        clientsMut.acquire()
+        clients.remove(client_socket)
+        clientsMut.release()
         return -1
 
 print('Ready...')
 
 clients = []
 clientsMut = threading.Lock()
-# newMesEvent = threading.Event()
-# threading.Thread(target=messageSender, args())
 
 def messageSender(text, author):
     clientsMut.acquire()

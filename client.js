@@ -59,4 +59,11 @@ wss.on('connection', (wscli) => {
             client.write(JSON.stringify(message));
         }
     });
+
+    wscli.addEventListener('close', (ev) => {
+        const endMes = {
+            type: 'end',
+        }
+        client.write(JSON.stringify(endMes));
+    });
 })
