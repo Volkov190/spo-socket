@@ -38,7 +38,7 @@ def getAllMessages():
         with connection.cursor() as cursor:
             cursor.execute("""SELECT public.messages.text, public.user.name FROM public.messages
                                     INNER JOIN public.user
-                                    ON public.user.id=public.messages.owner""")
+                                    ON public.user.id=public.messages.owner ORDER BY public.messages.id""")
             connection.commit()
             # print(cursor.fetchall())
             for line in cursor.fetchall():
@@ -52,6 +52,7 @@ def getAllMessages():
         return result
 
 def pushMessage(text, author):
+    print('tyt')
     result = False
     try:
         with connection.cursor() as cursor:
