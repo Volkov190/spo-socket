@@ -72,7 +72,6 @@ def pushMessage(text, author):
     finally:
         return result
 
-
 try:
     connection = psycopg2.connect(host = host, user = user, password = password, database = db_name)
 except Exception as ex:

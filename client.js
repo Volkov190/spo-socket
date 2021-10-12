@@ -58,6 +58,10 @@ wss.on('connection', (wscli) => {
             message.author = login;
             client.write(JSON.stringify(message));
         }
+
+        if (message.type === 'logout' && login) {
+            login = undefined;
+        }
     });
 
     wscli.addEventListener('close', (ev) => {

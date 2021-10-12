@@ -28,8 +28,7 @@ def listener(client_socket):
                 
                 if (queryType == 'start'):
                     result = db_functions.getAllMessages()
-                    response = {'type': 'start', 'result': result}
-                    
+                    response = {'type': 'start', 'result': result}                    
 
                 if (queryType == 'newmessage'):
                     result = db_functions.pushMessage(data['text'], data['author'])
@@ -40,7 +39,6 @@ def listener(client_socket):
                     response = None
                     clients.remove(client_socket)
                     print('client disconnected')
-
 
                 if (not response is None):
                     client_socket.send(json.dumps(response).encode('utf-8'))
