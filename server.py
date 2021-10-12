@@ -1,5 +1,6 @@
 import socket
 import threading
+import db_functions
 import json
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -18,22 +19,20 @@ def listener(client_socket):
                 result = False
                 response = None
                 if (queryType == 'signin'):
-                    pass                                        # @TODO login в бд
-                    result = True #debug
+                    result = db_functions.signin(data['login'], data['password'])
                     response = {'type': queryType, 'result': result, 'login': data['login']}
                 
                 if (queryType == 'signup'):
-                    pass                                        # @TODO sign up
-                    result = True
+                    result = db_functions.signup(data['login'], data['password'])
                     response = {'type': queryType, 'result': result}
                 
                 if (queryType == 'start'):
-                    pass                                        # @TODO установить соединение (отправить сообщения)
-                    response = {'type': 'start', 'result': [{'text': 'Test messages', 'author': 'Kirusha'}, {'text': 'It work', 'author': 'Sanya'}]} # debug
+                    result = db_functions.getAllMessages()
+                    response = {'type': 'start', 'result': result}
                     
 
                 if (queryType == 'newmessage'):
-                    pass                                        # @TODO сообщение в бд и событие остальным клиентам
+                    result = db_functions.pushMessage(data['text'], data['author'])
                     messageSender(data['text'], data['author'])
                     result = True
 
