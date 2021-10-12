@@ -5,6 +5,23 @@ const signup_but = document.querySelector('.login-area__submit_sign-up');
 const newMesArea = document.querySelector('.messages__new-message-area');
 const newMesBtn = document.querySelector('.new-message__button');
 const newMesForm = document.querySelector('.messages__new-message-area');
+const login__button = document.querySelector('.login__button');
+
+login__button.addEventListener('click', (ev) => {
+    if (ev.target.innerHTML === 'Выход') {
+        console.log('Выход');
+        const message = {
+            type: 'logout',
+        };
+    
+        socket.send(JSON.stringify(message));
+
+        form.classList.remove('header__login-area_none')
+        const loginText = document.querySelector('.login .login__text');
+        loginText.innerHTML = 'Вход';
+    }
+    
+});
 
 socket.addEventListener('message', (message) => {
     message = JSON.parse(message.data);
@@ -44,6 +61,7 @@ signin_but.addEventListener('click', (ev) => {
     };
 
     socket.send(JSON.stringify(message));
+    form.reset();
     ev.preventDefault();
 });
 
@@ -55,6 +73,7 @@ signup_but.addEventListener('click', (ev) => {
     };
 
     socket.send(JSON.stringify(message));
+    form.reset();
     ev.preventDefault();
 });
 
