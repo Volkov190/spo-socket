@@ -50,6 +50,13 @@ socket.addEventListener("message", (message) => {
     const elem = `<div class="message"><div class="message__user">${message.result.author} написал(а):</div><div class="message__text">${message.result.text}</div></div>`;
     newMesArea.insertAdjacentHTML("beforebegin", elem);
   }
+
+  if (message.type === 'signup') {
+      if (!message.result) {
+        const wrongMes = document.querySelector(".login-area__wrong-message");
+        wrongMes.innerHTML = "Это имя занято";
+      }
+  }
 });
 
 socket.addEventListener("close", () => {
