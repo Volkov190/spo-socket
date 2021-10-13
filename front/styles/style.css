@@ -65,6 +65,14 @@ h1 {
     margin-top: 3%;
 }
 
+.login-area__wrong-message {
+    color: red;
+    font-size: 10pt;
+    line-height: 20px;
+    height: 20px;
+    margin: 5px 0;
+}
+
 .title {
     margin-left: 40px;
 }

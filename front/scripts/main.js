@@ -9,7 +9,8 @@ const login__button = document.querySelector(".login__button");
 
 login__button.addEventListener("click", (ev) => {
   if (ev.target.innerHTML === "Выход") {
-    console.log("Выход");
+    const wrongMes = document.querySelector(".login-area__wrong-message");
+    wrongMes.innerHTML = "";
     const message = {
       type: "logout",
     };
@@ -39,6 +40,9 @@ socket.addEventListener("message", (message) => {
 
       const loginBut = document.querySelector(".login .login__button");
       loginBut.innerHTML = "Выход";
+    } else {
+      const wrongMes = document.querySelector(".login-area__wrong-message");
+      wrongMes.innerHTML = "Неверный логин или пароль";
     }
   }
 
