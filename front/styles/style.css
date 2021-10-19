@@ -57,6 +57,14 @@ h1 {
     padding: 5px;
 }
 
+.login .login__delete-button {
+    border: 1px solid red;
+}
+
+.login .login__delete-button_inactive {
+    display: none;
+}
+
 .login-area__login,
 .login-area__password,
 .login-area__submit {

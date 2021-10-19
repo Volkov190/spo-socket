@@ -35,6 +35,10 @@ def listener(client_socket):
                     messageSender(data['text'], data['author'])
                     result = True
 
+                if (queryType == 'remove'):
+                    db_functions.removeUser(data['login'])
+                    response = None
+
                 if (queryType == 'end'):
                     response = None
                     clients.remove(client_socket)

@@ -6,6 +6,24 @@ const newMesArea = document.querySelector(".messages__new-message-area");
 const newMesBtn = document.querySelector(".new-message__button");
 const newMesForm = document.querySelector(".messages__new-message-area");
 const login__button = document.querySelector(".login__button");
+const deleteButton = document.querySelector(".login__delete-button");
+
+deleteButton.addEventListener("click", (ev) => {
+  const message = {
+    type: 'remove',
+  }
+
+  socket.send(JSON.stringify(message));
+  const wrongMes = document.querySelector(".login-area__wrong-message");
+  wrongMes.innerHTML = "";
+
+  form.classList.remove("header__login-area_none");
+  const loginText = document.querySelector(".login .login__text");
+  loginText.innerHTML = "";
+  login__button.innerHTML = "Вход";
+  const deleteButton = document.querySelector(".login__delete-button");
+  deleteButton.classList.add("login__delete-button_inactive");
+});
 
 login__button.addEventListener("click", (ev) => {
   if (ev.target.innerHTML === "Выход") {
@@ -21,6 +39,8 @@ login__button.addEventListener("click", (ev) => {
     const loginText = document.querySelector(".login .login__text");
     loginText.innerHTML = "";
     ev.target.innerHTML = "Вход";
+    const deleteButton = document.querySelector(".login__delete-button");
+    deleteButton.classList.add("login__delete-button_inactive");
   }
 });
 
@@ -40,6 +60,8 @@ socket.addEventListener("message", (message) => {
 
       const loginBut = document.querySelector(".login .login__button");
       loginBut.innerHTML = "Выход";
+      const deleteButton = document.querySelector(".login__delete-button");
+      deleteButton.classList.remove("login__delete-button_inactive");
     } else {
       const wrongMes = document.querySelector(".login-area__wrong-message");
       wrongMes.innerHTML = "Неверный логин или пароль";
@@ -51,11 +73,11 @@ socket.addEventListener("message", (message) => {
     newMesArea.insertAdjacentHTML("beforebegin", elem);
   }
 
-  if (message.type === 'signup') {
-      if (!message.result) {
-        const wrongMes = document.querySelector(".login-area__wrong-message");
-        wrongMes.innerHTML = "Это имя занято";
-      }
+  if (message.type === "signup") {
+    if (!message.result) {
+      const wrongMes = document.querySelector(".login-area__wrong-message");
+      wrongMes.innerHTML = "Это имя занято";
+    }
   }
 });
 

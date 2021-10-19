@@ -62,6 +62,12 @@ wss.on('connection', (wscli) => {
         if (message.type === 'logout' && login) {
             login = undefined;
         }
+
+        if (message.type === 'remove' && login) {
+            message['login'] = login;
+            client.write(JSON.stringify(message));
+            login = undefined;
+        }
     });
 
     wscli.addEventListener('close', (ev) => {

@@ -72,6 +72,14 @@ def pushMessage(text, author):
     finally:
         return result
 
+def removeUser(login):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("DELETE FROM public.user WHERE name=%s;", (login,))
+            connection.commit()
+    except Exception as ex:
+        print('[DB Error] Signup Exception:', ex)
+
 try:
     connection = psycopg2.connect(host = host, user = user, password = password, database = db_name)
 except Exception as ex:
