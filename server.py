@@ -1,6 +1,6 @@
 import socket
 import threading
-import db_functions
+import db.db_functions as db_functions
 import json
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -14,6 +14,7 @@ def listener(client_socket):
             if (client_socket):
                 data = client_socket.recv(1024).decode('utf-8')
                 queryType = json.loads(data)['type']
+                print(queryType)
                 data = json.loads(data)
                 print(queryType)
                 result = False
@@ -28,7 +29,8 @@ def listener(client_socket):
                 
                 if (queryType == 'start'):
                     result = db_functions.getAllMessages()
-                    response = {'type': 'start', 'result': result}                    
+                    users = db_functions.getAllUsers()
+                    response = {'type': 'start', 'result': result, 'users': users}                    
 
                 if (queryType == 'newmessage'):
                     result = db_functions.pushMessage(data['text'], data['author'])
@@ -43,6 +45,15 @@ def listener(client_socket):
                     response = None
                     clients.remove(client_socket)
                     print('client disconnected')
+                
+                if (queryType == 'getDialogs'):
+                    result = db_functions.getDialog(data['from'], data['to'])
+                    response = {'type': queryType, 'to': data['to'], 'result': result}
+
+                if (queryType == 'newPrivateMessage'):
+                    result = db_functions.pushPrivateMessage(data['text'], data['from'], data['to'])
+                    privateMessageSender(data['text'], data['from'], data['to'])
+                    result = True
 
                 if (not response is None):
                     client_socket.send(json.dumps(response).encode('utf-8'))
@@ -62,6 +73,14 @@ clientsMut = threading.Lock()
 def messageSender(text, author):
     clientsMut.acquire()
     response = {'type': 'newmessage', 'result': {'text': text, 'author': author}}
+    for client in clients:
+        client.send(json.dumps(response).encode('utf-8'))
+
+    clientsMut.release()
+
+def privateMessageSender(text, login_from, login_to):
+    clientsMut.acquire()
+    response = {'type': 'newPrivateMessage', 'result': {'text': text, 'from': login_from, 'to': login_to}}
     for client in clients:
         client.send(json.dumps(response).encode('utf-8'))
 

@@ -1,6 +1,6 @@
 import psycopg2
 import hashlib
-from db_config import host, user, db_name, password
+from db.db_config import host, user, db_name, password
 
 def signup(login, password):
     result = False
@@ -52,7 +52,6 @@ def getAllMessages():
         return result
 
 def pushMessage(text, author):
-    print('tyt')
     result = False
     try:
         with connection.cursor() as cursor:
@@ -79,6 +78,75 @@ def removeUser(login):
             connection.commit()
     except Exception as ex:
         print('[DB Error] Signup Exception:', ex)
+
+def getAllUsers():
+    result = []
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""SELECT name FROM public.user WHERE id!=1""")
+            connection.commit()
+            # print(cursor.fetchall())
+            for line in cursor.fetchall():
+                message = {}
+                message["login"] = line[0]
+                result.append(message)
+    except Exception as ex:
+        print('[DB Error] getAllUsers Exception:', ex)
+    finally:
+        return result
+
+def getDialog(login_from, login_to):
+    result = []
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT id FROM public.user WHERE name=%s", (login_from,))
+            connection.commit()
+            # print(cursor.fetchall())
+            id_from = ""
+            id_to = ""
+            
+            for line in cursor.fetchall():
+                id_from = line[0]
+            cursor.execute("SELECT id FROM public.user WHERE name=%s", (login_to,))
+            connection.commit()
+            for line in cursor.fetchall():
+                id_to = line[0]
+
+            cursor.execute("SELECT text FROM public.messages_private WHERE (id_from='%s' AND id_to='%s') OR (id_from='%s' AND id_to='%s') ORDER BY id", (id_from, id_to, id_to, id_from))
+            connection.commit() 
+            for line in cursor.fetchall():
+                message = {}
+                message["message"] = line[0]
+                result.append(message)
+            print(result)
+    except Exception as ex:
+        print('[DB Error] getDialog Exception:', ex)
+    finally:
+        return result
+
+def pushPrivateMessage(text, login_from, login_to):
+    result = False
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT id FROM public.user WHERE name=%s", (login_from,))
+            connection.commit()
+            # print(cursor.fetchall())
+            id_from = ""
+            id_to = ""
+            
+            for line in cursor.fetchall():
+                id_from = line[0]
+            cursor.execute("SELECT id FROM public.user WHERE name=%s", (login_to,))
+            connection.commit()
+            for line in cursor.fetchall():
+                id_to = line[0]
+            cursor.execute("INSERT INTO public.messages_private (id_from, id_to, text) VALUES (%s, %s, %s)", (id_from, id_to, text))
+            connection.commit()
+            result = True
+    except Exception as ex:
+        print('[DB Error] pushPrivateMessage Exception:', ex)
+    finally:
+        return result
 
 try:
     connection = psycopg2.connect(host = host, user = user, password = password, database = db_name)

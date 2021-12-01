@@ -61,6 +61,7 @@ h1 {
     border: 1px solid red;
 }
 
+.login .login__messages-button_inactive,
 .login .login__delete-button_inactive {
     display: none;
 }
@@ -91,6 +92,12 @@ h1 {
     width: 60%;
 }
 
+.dialog_inactive,
+.privmessages_inactive,
+.messages_inactive {
+    display: none;
+}
+
 .new-message__text {
     width: 100%;
     height: 60px;
@@ -108,4 +115,14 @@ h1 {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 20px;
+}
+
+.privmessages {
+    
+}
+
+.privmessages__dialog {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
 }
